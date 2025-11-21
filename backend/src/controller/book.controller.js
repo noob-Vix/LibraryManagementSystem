@@ -2,7 +2,15 @@ import { Book } from "../model/book.model.js"
 
 export async function getAllBooks(req, res, next) {
     try {
-        const books = await Book.find().sort({createdAt:-1});
+        const search = req.query.search;
+        const filter ={};
+        if (search){
+            filter.$or =[
+                {title: {$regex:search, $options:"i"}},
+                {author:{$regex:search, $options:"i"}}
+            ]
+        }
+        const books = await Book.find(filter).sort({createdAt:-1});
         res.status(200).json(books);
     } catch (error) {
         console.log("Failed to fetch books:", error)

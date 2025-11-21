@@ -3,6 +3,7 @@ import { connectToDB } from './config/mongodb.js';
 import dotenv from 'dotenv';
 import bookRoutes from './routes/book.routes.js'
 import auth from './routes/auth.route.js'
+import user from './routes/user.route.js'
 import { PORT } from './config/env.js';
 import cookieParser from 'cookie-parser'
 
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser()); 
 
 app.use('/api/auth', auth)
+app.use('/api/users', user)
 app.use('/api/books', bookRoutes )
 
 const startServer = async ()=>{
