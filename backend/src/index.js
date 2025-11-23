@@ -5,7 +5,7 @@ import bookRoutes from "./routes/book.routes.js";
 import auth from "./routes/auth.route.js";
 import user from "./routes/user.route.js";
 import borrowRoutes from "./routes/borrow.routes.js";
-import { PORT } from "./config/env.js";
+import { PORT, CORS_ORIGIN } from "./config/env.js";
 import cookieParser from "cookie-parser";
 import cors from "cors"
 
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(cors({
-  origin: [process.env.CORS_ORIGIN, "https://h3wrw7sw-5173.asse.devtunnels.ms/"],
+  origin: [CORS_ORIGIN, "https://h3wrw7sw-5173.asse.devtunnels.ms/"],
   methods: ['GET', 'POST', 'PUT', 'PATCH',  'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
