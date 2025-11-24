@@ -24,6 +24,7 @@ type Borrow = {
   book?: Book | string
   user?: User | string
   borrowDate?: string;
+  dueDate?: string
   returnDate?: string | null;
 }
 
@@ -166,6 +167,18 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
+  const isOverdue = (borrow: Borrow) => {
+  if (!borrow.dueDate || borrow.returnDate) return false;
+  return new Date(borrow.dueDate) < new Date();
+};
+
+const daysLeft = (borrow: Borrow) => {
+  if (!borrow.dueDate) return null;
+  const diff = new Date(borrow.dueDate).getTime() - new Date().getTime();
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+};
+
+
   return (
     <div>
       <h1 className="text-2xl mb-4">Admin Dashboard</h1>
@@ -245,13 +258,37 @@ const AdminDashboard: React.FC = () => {
               <div>
                 <h3 className="font-semibold mb-2">All Borrows</h3>
                 <div className="space-y-2">
+                  
                   {borrowsAll.length === 0 && <div className="text-sm text-gray-600">No borrows found.</div>}
-                  {borrowsAll.map(b => (
-                    <div key={b._id} className="dark:bg-slate-900 dark:border-none p-3 bg-white border border-gray-200 rounded shadow-sm">
-                      <div className="font-medium">{typeof b.book === 'string' ? 'Book' : (b.book as Book).title}</div>
-                      <div className="text-sm dark:text-slate-400 text-gray-600">User: {typeof b.user === 'string' ? b.user : (b.user as User)?.email} • Borrowed: {b.borrowDate ? new Date(b.borrowDate).toLocaleString() : '-'} • Returned: {b.returnDate ? new Date(b.returnDate).toLocaleString() : '—'}</div>
-                    </div>
-                  ))}
+                  {borrowsAll.map(b => {
+                    const isOverdue = b.dueDate && !b.returnDate && new Date(b.dueDate) < new Date();
+                    const remainingDays = !b.returnDate && b.dueDate 
+                      ? Math.ceil((new Date(b.dueDate).getTime() - new Date().getTime()) / (1000 * 60 * 60 * 24))
+                      : null;
+
+                    return (
+                      <div
+                        key={b._id}
+                        className={`dark:bg-slate-900 dark:border-none p-3 border rounded shadow-sm ${
+                          isOverdue ? "border-red-600 bg-red-100" : "border-gray-200 bg-white"
+                        }`}
+                      >
+                        <div className="font-medium">
+                          {typeof b.book === 'string' ? 'Book' : (b.book as Book).title}
+                        </div>
+
+                        <div className="text-sm dark:text-slate-400 text-gray-600">
+                          User: {typeof b.user === 'string' ? b.user : (b.user as User)?.email} • 
+                          Borrowed: {b.borrowDate ? new Date(b.borrowDate).toLocaleDateString() : '-'} • 
+                          Returned: {b.returnDate ? new Date(b.returnDate).toLocaleDateString() : '—'}
+                          {!b.returnDate && b.dueDate && (
+                            <> • Due: {new Date(b.dueDate).toLocaleDateString()} {remainingDays !== null ? `(${remainingDays} day${remainingDays > 1 ? 's' : ''} left)` : ''}</>
+                          )}
+                        </div>
+                      </div>
+                    );
+                  })}
+
                 </div>
               </div>
             )

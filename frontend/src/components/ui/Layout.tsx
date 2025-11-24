@@ -11,7 +11,7 @@ export const Layout: React.FC<{children?: React.ReactNode}> = ({children}) => {
     <div className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-white">
       <header className="bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800">
         <div className="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
-          <Link to="/" className="font-semibold">Library</Link>
+          <Link to="/" className="font-bold bg-gradient-to-r from-indigo-500 to-purple-500 bg-clip-text text-transparent">LibraSphere</Link>
           <nav className="flex items-center space-x-3">
             {!auth.user ? (
               <>

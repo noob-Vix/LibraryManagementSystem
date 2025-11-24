@@ -1,5 +1,5 @@
 import express from 'express';
-import { borrowBook, userBorrowHistory,returnBook,userCurrentBorrows , adminViewAllBorrows} from '../controller/borrow.controller.js';
+import { borrowBook, userBorrowHistory,returnBook,userCurrentBorrows , adminViewAllBorrows, getOverdueBorrows} from '../controller/borrow.controller.js';
 import { authorize } from '../middleware/auth.middleware.js';
 import { adminCheck } from '../middleware/admin.middleware.js';
 
@@ -14,5 +14,7 @@ borrowRouter.get("/my-borrows", authorize, userCurrentBorrows);
 borrowRouter.get("/history", authorize, userBorrowHistory);
 
 borrowRouter.get("/all", authorize, adminCheck, adminViewAllBorrows);
+
+borrowRouter.get("/overdue",authorize, adminCheck, getOverdueBorrows)
 
 export default borrowRouter;

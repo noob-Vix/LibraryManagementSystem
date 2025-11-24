@@ -18,6 +18,7 @@ type Borrow = {
   book: Book | string;
   user?: { _id?: string; name?: string; email?: string };
   borrowDate?: string;
+  dueDate?: string;
   returnDate?: string | null;
 };
 
@@ -194,6 +195,11 @@ const UserDashboard: React.FC = () => {
                 Borrowed at: {" "}
                 {m.borrowDate ? new Date(m.borrowDate).toLocaleString() : "-"}
               </div>
+
+              <div className="text-sm dark:text-slate-400 text-gray-600">
+                Due: {" "}
+                {m.dueDate ? new Date(m.dueDate).toLocaleString() : "-"}
+              </div>
             </div>
             <div>
               <Button onClick={() => returnBorrow(m._id)}>Return</Button>
@@ -219,6 +225,12 @@ const UserDashboard: React.FC = () => {
             <div className="text-sm dark:text-slate-400 text-gray-600">
               Borrowed: {" "}
               {h.borrowDate ? new Date(h.borrowDate).toLocaleString() : "-"} •
+              <div className={`text-sm ${
+                h.dueDate && new Date(h.dueDate) < new Date()
+                  ? "text-red-500 font-semibold"
+                  : "dark:text-slate-400 text-gray-600"
+              }`}>
+              </div>
               Returned: {" "}
               {h.returnDate ? new Date(h.returnDate).toLocaleString() : "—"}
             </div>
